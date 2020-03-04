@@ -131,7 +131,13 @@ function findOwnerExternalNetwork(api, cfg) {
             });
 
             var external = owned.filter(function filterExternal(network) {
-                return (netconf.isNetExternal(network));
+                var ext = netconf.isNetExternal(network);
+                api.extraExternalTags.forEach(function (tag) {
+                    if (netconf.isNetTagged(network, tag)) {
+                        ext = true;
+                    }
+                });
+                return ext;
             });
 
             if (external.length === 0) {
